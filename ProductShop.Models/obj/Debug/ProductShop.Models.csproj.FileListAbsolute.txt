@@ -1,0 +1,10 @@
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\ProductShop.Models.dll.config
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\ProductShop.Models.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\ProductShop.Models.pdb
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\EntityFramework.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\EntityFramework.xml
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\obj\Debug\ProductShop.Models.csprojResolveAssemblyReference.cache
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\obj\Debug\ProductShop.Models.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Models\obj\Debug\ProductShop.Models.pdb
