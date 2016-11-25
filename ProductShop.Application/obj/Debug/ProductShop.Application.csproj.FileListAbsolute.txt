@@ -12,3 +12,5 @@ C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\P
 C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Application\obj\Debug\ProductShop.Application.csprojResolveAssemblyReference.cache
 C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Application\obj\Debug\ProductShop.Application.exe
 C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Application\obj\Debug\ProductShop.Application.pdb
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Application\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\ProductShop.Application\bin\Debug\Newtonsoft.Json.xml

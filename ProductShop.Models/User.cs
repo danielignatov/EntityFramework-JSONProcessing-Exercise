@@ -1,5 +1,6 @@
 ﻿namespace ProductShop.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -41,7 +42,25 @@
         [Required, MinLength(3)]
         public string LastName { get; set; }
 
-        public int Age { get; set; }
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                string fullName = "";
+
+                if (!String.IsNullOrWhiteSpace(this.FirstName))
+                {
+                    fullName += this.FirstName;
+                }
+
+                fullName += this.LastName;
+
+                return fullName;
+            }
+        }
+
+        public int? Age { get; set; }
 
         [NotMapped]
         public ICollection<Product> SoldProducts

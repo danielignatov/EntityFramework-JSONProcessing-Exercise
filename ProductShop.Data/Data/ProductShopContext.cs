@@ -1,5 +1,6 @@
-namespace ProductShop.Data
+namespace ProductShop.Data.Data
 {
+    using Data;
     using Models;
     using System;
     using System.Data.Entity;
@@ -10,6 +11,7 @@ namespace ProductShop.Data
         public ProductShopContext()
             : base("name=ProductShopContext")
         {
+            Database.SetInitializer<ProductShopContext>(new ProductShopDBInitializer());
         }
 
         public virtual IDbSet<User> Users { get; set; }
