@@ -18,7 +18,86 @@
 
             context.Products.Count();
 
-            ExportProductsInPriceRangeWithNoBuyerToJSON(500m, 1000m, context);
+            //ExportProductsInPriceRangeWithNoBuyerToJSON(500m, 1000m, context);
+            //ExportUsersSoldProductToJSON(context);
+            //ExportCategoriesByProductsCountToJSON(context);
+            ExportUsersAndProductsToJSON(context);
+        }
+
+        private static void ExportUsersAndProductsToJSON(ProductShopContext context)
+        {
+            var usersAndProducts = new
+            {
+                usersCount = context.Users.Count(),
+                users = context.Users
+                .Where(sp => sp.SoldProducts.Count > 0)
+                .OrderByDescending(sp => sp.SoldProducts.Count)
+                .ThenBy(ln => ln.LastName)
+                .Select(user => new
+                {
+                    firstName = user.FirstName,
+                    lastName = user.LastName,
+                    age = user.Age,
+                    soldProducts = new
+                    {
+                        count = user.SoldProducts.Count(),
+                        products = user.SoldProducts.Select(product => new
+                        {
+                            name = product.Name,
+                            price = product.Price
+                        })
+                    }
+                })
+            };
+
+            var outputAsJson = JsonConvert.SerializeObject(usersAndProducts, Formatting.Indented);
+
+            File.WriteAllText("../../users-and-products.json", outputAsJson);
+            Console.WriteLine(outputAsJson);
+        }
+
+        private static void ExportCategoriesByProductsCountToJSON(ProductShopContext context)
+        {
+            var categoriesByProductsCount = context.Categories
+                .Where(pc => pc.Products.Count > 0)
+                .OrderByDescending(pc => pc.Products.Count)
+                .Select(cat => new
+                {
+                    category = cat.Name,
+                    productsCount = cat.Products.Count,
+                    averagePrice = cat.Products.Average(p => p.Price),
+                    totalRevenue = cat.Products.Sum(s => s.Price)
+                });
+
+            var outputAsJson = JsonConvert.SerializeObject(categoriesByProductsCount, Formatting.Indented);
+
+            File.WriteAllText("../../categories-by-products.json", outputAsJson);
+            Console.WriteLine(outputAsJson);
+        }
+
+        private static void ExportUsersSoldProductToJSON(ProductShopContext context)
+        {
+            var usersSoldProduct = context.Users
+                .Where(sp => sp.SoldProducts.Count > 0)
+                .OrderBy(ln => ln.LastName)
+                .ThenBy(fn => fn.FirstName)
+                .Select(user => new
+                {
+                    firstName = user.FirstName,
+                    lastName = user.LastName,
+                    soldProducts = user.SoldProducts.Select(product => new
+                    {
+                        name = product.Name,
+                        price = product.Price,
+                        buyerFirstName = product.Buyer.FirstName,
+                        buyerLastName = product.Buyer.LastName
+                    })
+                });
+
+            var outputAsJson = JsonConvert.SerializeObject(usersSoldProduct, Formatting.Indented);
+
+            File.WriteAllText("../../users-sold-products.json", outputAsJson);
+            Console.WriteLine(outputAsJson);
         }
 
         private static void ExportProductsInPriceRangeWithNoBuyerToJSON(decimal minValue, decimal maxValue, ProductShopContext context)

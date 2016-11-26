@@ -19,16 +19,6 @@
         {
             this.categories = new HashSet<Category>();
         }
-
-        public Product(int id, string name, decimal price, User seller, User buyer)
-        {
-            this.Id = id;
-            this.Name = name;
-            this.Price = price;
-            this.Seller = seller;
-            this.Buyer = buyer;
-            this.categories = new HashSet<Category>();
-        }
         #endregion
 
         #region Properties
@@ -37,12 +27,12 @@
 
         [Required, MinLength(3)]
         public string Name { get; set; }
-
+        
         [Required]
         public decimal Price { get; set; }
-
+        
         public User Seller { get; set; }
-
+        
         public User Buyer { get; set; }
 
         public virtual ICollection<Category> Categories

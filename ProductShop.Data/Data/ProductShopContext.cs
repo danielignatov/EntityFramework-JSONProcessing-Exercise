@@ -32,9 +32,21 @@ namespace ProductShop.Data.Data
                  cs.ToTable("UserFriends");
              });
 
-            //modelBuilder.Entity<Product>()
-            //    .HasKey<User>(s => s.Seller)
-            //    .Map(cs => cs.)
+            modelBuilder.Entity<User>()
+                .HasMany<Product>(sp => sp.SoldProducts)
+                .WithOptional(b => b.Buyer)
+                .Map(b =>
+                {
+                    b.MapKey("BuyerId");
+                });
+
+            modelBuilder.Entity<User>()
+                .HasMany<Product>(bp => bp.BoughtProducts)
+                .WithOptional(s => s.Seller)
+                .Map(s =>
+                {
+                    s.MapKey("SellerId");
+                });
 
             base.OnModelCreating(modelBuilder);
         }

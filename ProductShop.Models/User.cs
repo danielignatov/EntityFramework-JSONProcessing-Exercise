@@ -42,28 +42,9 @@
         [Required, MinLength(3)]
         public string LastName { get; set; }
 
-        [NotMapped]
-        public string FullName
-        {
-            get
-            {
-                string fullName = "";
-
-                if (!String.IsNullOrWhiteSpace(this.FirstName))
-                {
-                    fullName += this.FirstName;
-                }
-
-                fullName += this.LastName;
-
-                return fullName;
-            }
-        }
-
         public int? Age { get; set; }
-
-        [NotMapped]
-        public ICollection<Product> SoldProducts
+        
+        public virtual ICollection<Product> SoldProducts
         {
             get
             {
@@ -74,9 +55,8 @@
                 this.soldProducts = value;
             }
         }
-
-        [NotMapped]
-        public ICollection<Product> BoughtProducts
+        
+        public virtual ICollection<Product> BoughtProducts
         {
             get
             {
