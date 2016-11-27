@@ -1,0 +1,12 @@
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\CarDealer.Data.dll.config
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\CarDealer.Data.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\CarDealer.Data.pdb
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\CarDealer.Models.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\EntityFramework.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\CarDealer.Models.pdb
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\EntityFramework.xml
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\obj\Debug\CarDealer.Data.csprojResolveAssemblyReference.cache
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\obj\Debug\CarDealer.Data.dll
+C:\Users\Даниел\Documents\GitHub\EntityFramework-JSONProcessing-Exercise\CarDealer.Data\obj\Debug\CarDealer.Data.pdb

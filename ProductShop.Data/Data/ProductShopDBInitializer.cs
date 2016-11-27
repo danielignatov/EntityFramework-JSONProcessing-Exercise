@@ -99,13 +99,13 @@
                     continue;
                 }
                 
-                int randomSellerUserId = rng.Next(0, totalNumberOfUsers);
-                int randomBuyerUserId = rng.Next(0, totalNumberOfUsers);
+                int randomSellerUserId = rng.Next(1, totalNumberOfUsers);
+                int randomBuyerUserId = rng.Next(1, totalNumberOfUsers);
 
                 // Ensure Seller UserId and Buyer UserId are different.
                 while (randomSellerUserId == randomBuyerUserId)
                 {
-                    randomBuyerUserId = rng.Next(0, totalNumberOfUsers);
+                    randomBuyerUserId = rng.Next(1, totalNumberOfUsers);
                 }
 
                 var productContext = new Product()

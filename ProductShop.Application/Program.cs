@@ -26,10 +26,12 @@
 
         private static void ExportUsersAndProductsToJSON(ProductShopContext context)
         {
+            var users = context.Users;
+
             var usersAndProducts = new
             {
-                usersCount = context.Users.Count(),
-                users = context.Users
+                usersCount = users.Count(),
+                users = users
                 .Where(sp => sp.SoldProducts.Count > 0)
                 .OrderByDescending(sp => sp.SoldProducts.Count)
                 .ThenBy(ln => ln.LastName)
