@@ -21,12 +21,137 @@
         static void Main(string[] args)
         {
             CarDealerContext context = new CarDealerContext();
+            string carMake = "Toyota";
 
             //ImportSuppliers(context);
             //ImportParts(context);
             //ImportCars(context);
             //ImportCustomers(context);
-            ImportRandomSales(context);
+            //ImportRandomSales(context);
+            //ExportOrderedCustomersToJSON(context);
+            //ExportCarsFromMakeToJSON(carMake, context);
+            //ExportLocalSuppliersToJSON(context);
+            //ExportCarsAndPartsToJSON(context);
+            //ExportCustomersTotalSalesToJSON(context); // TODO
+            //ExportSalesWithAppliedDiscountToJSON(context); // TODO
+        }
+
+        private static void ExportSalesWithAppliedDiscountToJSON(CarDealerContext context)
+        {
+            var sales = context.Sales;
+
+            var salesWithAppliedDiscount = sales
+                .Select(sale => new
+                {
+                    
+                });
+
+            var json = JsonConvert.SerializeObject(salesWithAppliedDiscount, Formatting.Indented);
+            File.WriteAllText($"../../sales-discounts.json", json);
+            Console.WriteLine(json);
+        }
+
+        private static void ExportCustomersTotalSalesToJSON(CarDealerContext context)
+        {
+            var customers = context.Customers;
+
+            var customersTotalSales = customers
+                .OrderBy(oc => oc.Sales.Count())
+                //.ThenByDescending(sm => sm.Sales.Select(c => c.Car.Parts.Select(p => p.Price).Sum()))
+                .Select(customer => new
+                {
+                    fullName = customer.Name,
+                    boughtCars = customer.Sales.Count(),
+                    // This need to be one number
+                    spentMoney = customer.Sales.Select(c => c.Car.Parts.Select(p => p.Price).Sum())
+                });
+
+            var json = JsonConvert.SerializeObject(customersTotalSales, Formatting.Indented);
+            File.WriteAllText($"../../customers-total-sales.json", json);
+            Console.WriteLine(json);
+        }
+
+        private static void ExportCarsAndPartsToJSON(CarDealerContext context)
+        {
+            var carsAndParts = new
+            {
+                car = context.Cars
+                .Select(car => new
+                {
+                    Make = car.Make,
+                    Model = car.Model,
+                    TravelledDistance = car.TravelledDistance,
+                    parts = car.Parts.Select(part => new
+                    {
+                        Name = part.Name,
+                        Price = part.Price
+                    })
+                })
+            };
+
+        var json = JsonConvert.SerializeObject(carsAndParts, Formatting.Indented);
+            File.WriteAllText($"../../cars-and-parts.json", json);
+            Console.WriteLine(json);
+        }
+
+        private static void ExportLocalSuppliersToJSON(CarDealerContext context)
+        {
+            var localSuppliers = context.Suppliers
+                .Where(i => i.IsImporter == false)
+                .Select(supplier => new
+                {
+                    Id = supplier.Id,
+                    Name = supplier.Name,
+                    partsCount = supplier.Parts.Count()
+                });
+
+            var json = JsonConvert.SerializeObject(localSuppliers, Formatting.Indented);
+            File.WriteAllText($"../../local-suppliers.json", json);
+            Console.WriteLine(json);
+        }
+
+        private static void ExportCarsFromMakeToJSON(string carMake, CarDealerContext context)
+        {
+            var carsFromMake = context.Cars
+                .OrderBy(n => n.Model)
+                .ThenByDescending(td => td.TravelledDistance)
+                .Where(m => m.Make == carMake)
+                .Select(car => new
+                {
+                    Id = car.Id,
+                    Make = car.Make,
+                    Model = car.Model,
+                    TravelledDistance = car.TravelledDistance
+                });
+
+            var json = JsonConvert.SerializeObject(carsFromMake, Formatting.Indented);
+            File.WriteAllText($"../../{carMake}-cars.json", json);
+            Console.WriteLine(json);
+        }
+
+        private static void ExportOrderedCustomersToJSON(CarDealerContext context)
+        {
+            var orderedCustomers = context.Customers
+                .OrderBy(bd => bd.BirthDate)
+                .ThenBy(yd => yd.IsYoungDriver == false)
+                .Select(user => new
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    BirthDate = user.BirthDate,
+                    IsYoungDriver = user.IsYoungDriver,
+                    Sales = user.Sales.Select(sale => new
+                    {
+                        sale.Id,
+                        sale.Car.Make,
+                        sale.Customer.Name,
+                        sale.Discount
+                    })
+                });
+
+            var json = JsonConvert.SerializeObject(orderedCustomers, Formatting.Indented);
+            File.WriteAllText("../../ordered-customers.json", json);
+            Console.WriteLine(json);
         }
 
         private static void ImportRandomSales(CarDealerContext context)
@@ -36,7 +161,7 @@
             int quantityOfAllCars = context.Cars.Count();
             int quantityOfAllCustomers = context.Customers.Count();
             Double[] discounts = new Double[] { 0, 5, 10, 15, 20, 30, 40, 50 };
-            
+
             for (int i = 0; i < salesCount; i++)
             {
                 Car randomCar = context.Cars.Find(rng.Next(1, quantityOfAllCars));

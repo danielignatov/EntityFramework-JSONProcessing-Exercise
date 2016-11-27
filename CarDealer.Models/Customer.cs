@@ -3,20 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class Customer
     {
         #region Fields
-        private ICollection<Sale> cars;
+        private ICollection<Sale> sales;
         #endregion
 
         #region Constructor
         public Customer()
         {
-            this.cars = new HashSet<Sale>();
+            this.sales = new HashSet<Sale>();
         }
         #endregion
 
@@ -32,15 +29,15 @@
 
         public bool IsYoungDriver { get; set; }
 
-        public virtual ICollection<Sale> Cars
+        public virtual ICollection<Sale> Sales
         {
             get
             {
-                return this.cars;
+                return this.sales;
             }
             set
             {
-                this.cars = value;
+                this.sales = value;
             }
         }
         #endregion
