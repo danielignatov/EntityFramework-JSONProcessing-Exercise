@@ -27,7 +27,7 @@
         
         public Customer Customer { get; set; }
 
-        public double Discount { get; set; }
+        public Decimal Discount { get; set; }
         #endregion
     }
 }

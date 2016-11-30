@@ -18,11 +18,17 @@
         private const string ImportCarsPath = @"../../../Resources/cars.json";
         private const string ImportCustomersPath = @"../../../Resources/customers.json";
 
+        private const string ImportSuppliersPathXML = @"../../../Resources/suppliers.xml";
+        private const string ImportPartsPathXML = @"../../../Resources/parts.xml";
+        private const string ImportCarsPathXML = @"../../../Resources/cars.xml";
+        private const string ImportCustomersPathXML = @"../../../Resources/customers.xml";
+
         static void Main(string[] args)
         {
             CarDealerContext context = new CarDealerContext();
             string carMake = "Toyota";
 
+            /// JSON Processing
             //ImportSuppliers(context);
             //ImportParts(context);
             //ImportCars(context);
@@ -32,18 +38,43 @@
             //ExportCarsFromMakeToJSON(carMake, context);
             //ExportLocalSuppliersToJSON(context);
             //ExportCarsAndPartsToJSON(context);
-            //ExportCustomersTotalSalesToJSON(context); // TODO
-            //ExportSalesWithAppliedDiscountToJSON(context); // TODO
+            //ExportCustomersTotalSalesToJSON(context);
+            //ExportSalesWithAppliedDiscountToJSON(context);
+
+            /// XML Processing
+            //ImportSuppliersFromXML(context);
+            //ImportPartsFromXML(context);
+            //ImportCarsFromXML(context);
+            //ImportCustomersFromXML(context);
+            //ImportRandomSales(context);
+            //ExportOrderedCustomersToXML(context);
+            //ExportCarsFromMakeToXML(carMake, context);
+            //ExportLocalSuppliersToXML(context);
+            //ExportCarsAndPartsToXML(context);
+            //ExportCustomersTotalSalesToXML(context);
+            //ExportSalesWithAppliedDiscountToXML(context);
+        }
+
+        private static void ImportSuppliersFromXML(CarDealerContext context)
+        {
+            throw new NotImplementedException();
         }
 
         private static void ExportSalesWithAppliedDiscountToJSON(CarDealerContext context)
         {
-            var sales = context.Sales;
-
-            var salesWithAppliedDiscount = sales
+            var salesWithAppliedDiscount = context.Sales
                 .Select(sale => new
                 {
-                    
+                    car = new
+                    {
+                        sale.Car.Make,
+                        sale.Car.Model,
+                        sale.Car.TravelledDistance
+                    },
+                    customerName = sale.Customer.Name,
+                    Discount = sale.Discount,
+                    price = sale.Car.Parts.Sum(p => p.Price),
+                    priceWithDiscount = sale.Car.Parts.Sum(p => p.Price) - (sale.Car.Parts.Sum(p => p.Price) * sale.Discount)
                 });
 
             var json = JsonConvert.SerializeObject(salesWithAppliedDiscount, Formatting.Indented);
@@ -53,18 +84,17 @@
 
         private static void ExportCustomersTotalSalesToJSON(CarDealerContext context)
         {
-            var customers = context.Customers;
-
-            var customersTotalSales = customers
-                .OrderBy(oc => oc.Sales.Count())
-                //.ThenByDescending(sm => sm.Sales.Select(c => c.Car.Parts.Select(p => p.Price).Sum()))
-                .Select(customer => new
+            var customersTotalSales = context.Customers
+                .Where(s => s.Sales.Any() == true)
+                .Select(c => new
                 {
-                    fullName = customer.Name,
-                    boughtCars = customer.Sales.Count(),
-                    // This need to be one number
-                    spentMoney = customer.Sales.Select(c => c.Car.Parts.Select(p => p.Price).Sum())
-                });
+                    fullName = c.Name,
+                    boughtCars = c.Sales.Count,
+                    spentMoney = c.Sales.Sum(p => p.Car.Parts.Sum(s => s.Price))
+                })
+                .OrderByDescending(c => c.spentMoney)
+                .ThenByDescending(sm => sm.spentMoney)
+                .ToList();
 
             var json = JsonConvert.SerializeObject(customersTotalSales, Formatting.Indented);
             File.WriteAllText($"../../customers-total-sales.json", json);
@@ -160,7 +190,7 @@
             int salesCount = rng.Next(20, 50);
             int quantityOfAllCars = context.Cars.Count();
             int quantityOfAllCustomers = context.Customers.Count();
-            Double[] discounts = new Double[] { 0, 5, 10, 15, 20, 30, 40, 50 };
+            Decimal[] discounts = new Decimal[] { 0, 0.05m, 0.10m, 0.15m, 0.20m, 0.30m, 0.40m, 0.50m };
 
             for (int i = 0; i < salesCount; i++)
             {
