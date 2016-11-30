@@ -10,6 +10,8 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
 
     class Program
     {
@@ -43,7 +45,7 @@
 
             /// XML Processing
             //ImportSuppliersFromXML(context);
-            //ImportPartsFromXML(context);
+            ImportPartsFromXML(context);
             //ImportCarsFromXML(context);
             //ImportCustomersFromXML(context);
             //ImportRandomSales(context);
@@ -55,9 +57,84 @@
             //ExportSalesWithAppliedDiscountToXML(context);
         }
 
+        private static void ImportPartsFromXML(CarDealerContext context)
+        {
+            var xml = XDocument.Load(ImportPartsPathXML);
+            var parts = xml.XPathSelectElements("parts/part");
+            int totalNumberOfPartsAddedInDatabase = 0;
+            int totalNumberOfPartsThatFailedToBeAddedInDatabase = 0;
+            Random rng = new Random();
+
+            foreach (var part in parts)
+            {
+                var partName = part.Attribute("name");
+                var partPrice = part.Attribute("price");
+                var partQuantity = part.Attribute("quantity");
+
+                if (String.IsNullOrWhiteSpace(partName.Value))
+                {
+                    totalNumberOfPartsThatFailedToBeAddedInDatabase++;
+                    continue;
+                }
+
+                Part partEntity = new Part()
+                {
+                    Name = partName.Value,
+                    Price = Convert.ToDecimal(partPrice.Value),
+                    Quantity = Convert.ToInt32(partQuantity.Value),
+                    Supplier = context.Suppliers.Find(rng.Next(1, context.Suppliers.Count()))
+                };
+
+                context.Parts.Add(partEntity);
+                totalNumberOfPartsAddedInDatabase++;
+            }
+
+            context.SaveChanges();
+            Console.WriteLine($"{totalNumberOfPartsAddedInDatabase} new parts added to DB!");
+
+            if (totalNumberOfPartsThatFailedToBeAddedInDatabase != 0)
+            {
+                Console.WriteLine($"{totalNumberOfPartsThatFailedToBeAddedInDatabase} failed (Invalid XML data).");
+            }
+        }
+
         private static void ImportSuppliersFromXML(CarDealerContext context)
         {
-            throw new NotImplementedException();
+            var xml = XDocument.Load(ImportSuppliersPathXML);
+            var suppliers = xml.XPathSelectElements("suppliers/supplier");
+            int totalNumberOfSuppliersAddedInDatabase = 0;
+            int totalNumberOfSuppliersThatFailedToBeAddedInDatabase = 0;
+
+            foreach (var supplier in suppliers)
+            {
+                var supplierName = supplier.Attribute("name");
+                var isImporter = supplier.Attribute("is-importer");
+
+                if ((String.IsNullOrWhiteSpace(supplierName.Value)) ||
+                    (String.IsNullOrWhiteSpace(isImporter.Value)) ||
+                    (isImporter.Value != "true" && isImporter.Value != "false"))
+                {
+                    totalNumberOfSuppliersThatFailedToBeAddedInDatabase++;
+                    continue;
+                }
+
+                Supplier supplierEntity = new Supplier()
+                {
+                    Name = supplierName.Value,
+                    IsImporter = Convert.ToBoolean(isImporter.Value)
+                };
+                
+                context.Suppliers.Add(supplierEntity);
+                totalNumberOfSuppliersAddedInDatabase++;
+            }
+            
+            context.SaveChanges();
+            Console.WriteLine($"{totalNumberOfSuppliersAddedInDatabase} new suppliers added to DB!");
+
+            if (totalNumberOfSuppliersThatFailedToBeAddedInDatabase != 0)
+            {
+                Console.WriteLine($"{totalNumberOfSuppliersThatFailedToBeAddedInDatabase} failed (Invalid XML data).");
+            }
         }
 
         private static void ExportSalesWithAppliedDiscountToJSON(CarDealerContext context)
@@ -119,7 +196,7 @@
                 })
             };
 
-        var json = JsonConvert.SerializeObject(carsAndParts, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(carsAndParts, Formatting.Indented);
             File.WriteAllText($"../../cars-and-parts.json", json);
             Console.WriteLine(json);
         }
