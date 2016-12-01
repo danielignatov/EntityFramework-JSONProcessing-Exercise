@@ -8,8 +8,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Xml.Linq;
     using System.Xml.XPath;
 
@@ -45,16 +43,117 @@
 
             /// XML Processing
             //ImportSuppliersFromXML(context);
-            ImportPartsFromXML(context);
+            //ImportPartsFromXML(context);
             //ImportCarsFromXML(context);
             //ImportCustomersFromXML(context);
             //ImportRandomSales(context);
-            //ExportOrderedCustomersToXML(context);
+            ExportOrderedCustomersToXML(context);
             //ExportCarsFromMakeToXML(carMake, context);
             //ExportLocalSuppliersToXML(context);
             //ExportCarsAndPartsToXML(context);
             //ExportCustomersTotalSalesToXML(context);
             //ExportSalesWithAppliedDiscountToXML(context);
+        }
+
+        private static void ExportOrderedCustomersToXML(CarDealerContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void ImportCustomersFromXML(CarDealerContext context)
+        {
+            var xml = XDocument.Load(ImportCustomersPathXML);
+            int totalNumberOfCustomersAddedInDatabase = 0;
+            int totalNumberOfCustomersThatFailedToBeAddedInDatabase = 0;
+            Random rng = new Random();
+
+            foreach (var customer in xml.Root.Elements("customer"))
+            {
+                var customerName = customer.Attribute("name");
+                var customerBirthBate = customer.Element("birth-date");
+                var customerIsYoungDriver = customer.Element("is-young-driver");
+
+                if (String.IsNullOrWhiteSpace(customerName.Value))
+                {
+                    totalNumberOfCustomersThatFailedToBeAddedInDatabase++;
+                    continue;
+                }
+
+                Customer customerEntity = new Customer()
+                {
+                    Name = customerName.Value,
+                    BirthDate = Convert.ToDateTime(customerBirthBate.Value),
+                    IsYoungDriver = Convert.ToBoolean(customerIsYoungDriver.Value)
+                };
+
+                context.Customers.Add(customerEntity);
+                totalNumberOfCustomersAddedInDatabase++;
+            }
+
+            context.SaveChanges();
+            Console.WriteLine($"{totalNumberOfCustomersAddedInDatabase} new customers added to DB!");
+
+            if (totalNumberOfCustomersThatFailedToBeAddedInDatabase != 0)
+            {
+                Console.WriteLine($"{totalNumberOfCustomersThatFailedToBeAddedInDatabase} failed (Invalid XML data).");
+            }
+        }
+
+        private static void ImportCarsFromXML(CarDealerContext context)
+        {
+            var xml = XDocument.Load(ImportCarsPathXML);
+            int totalNumberOfCarsAddedInDatabase = 0;
+            int totalNumberOfCarsThatFailedToBeAddedInDatabase = 0;
+            Random rng = new Random();
+
+            foreach (var car in xml.Root.Elements("car"))
+            {
+                var carMake = car.Element("make");
+                var carModel = car.Element("model");
+                var carTravelledDistance = car.Element("travelled-distance");
+
+                if ((String.IsNullOrWhiteSpace(carMake.Value)) ||
+                    (String.IsNullOrWhiteSpace(carModel.Value)))
+                {
+                    totalNumberOfCarsThatFailedToBeAddedInDatabase++;
+                    continue;
+                }
+
+                var partsToAdd = new HashSet<Part>();
+                int quantityOfAddedParts = rng.Next(10, 21);
+                int quantityOfAllParts = context.Parts.Count();
+
+                for (int i = 0; i < quantityOfAddedParts; i++)
+                {
+                    Part newPart = context.Parts.Find(rng.Next(1, quantityOfAllParts));
+
+                    while (partsToAdd.Contains(newPart))
+                    {
+                        newPart = context.Parts.Find(rng.Next(1, quantityOfAllParts));
+                    }
+
+                    partsToAdd.Add(newPart);
+                }
+
+                Car carEntity = new Car()
+                {
+                    Make = carMake.Value,
+                    Model = carModel.Value,
+                    TravelledDistance = Convert.ToInt64(carTravelledDistance.Value),
+                    Parts = partsToAdd
+                };
+
+                context.Cars.Add(carEntity);
+                totalNumberOfCarsAddedInDatabase++;
+            }
+
+            context.SaveChanges();
+            Console.WriteLine($"{totalNumberOfCarsAddedInDatabase} new cars added to DB!");
+
+            if (totalNumberOfCarsThatFailedToBeAddedInDatabase != 0)
+            {
+                Console.WriteLine($"{totalNumberOfCarsThatFailedToBeAddedInDatabase} failed (Invalid XML data).");
+            }
         }
 
         private static void ImportPartsFromXML(CarDealerContext context)
@@ -123,11 +222,11 @@
                     Name = supplierName.Value,
                     IsImporter = Convert.ToBoolean(isImporter.Value)
                 };
-                
+
                 context.Suppliers.Add(supplierEntity);
                 totalNumberOfSuppliersAddedInDatabase++;
             }
-            
+
             context.SaveChanges();
             Console.WriteLine($"{totalNumberOfSuppliersAddedInDatabase} new suppliers added to DB!");
 
