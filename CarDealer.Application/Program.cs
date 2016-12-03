@@ -47,7 +47,7 @@
             //ImportCarsFromXML(context);
             //ImportCustomersFromXML(context);
             //ImportRandomSales(context);
-            ExportOrderedCustomersToXML(context);
+            //ExportOrderedCustomersToXML(context);
             //ExportCarsFromMakeToXML(carMake, context);
             //ExportLocalSuppliersToXML(context);
             //ExportCarsAndPartsToXML(context);
@@ -55,9 +55,226 @@
             //ExportSalesWithAppliedDiscountToXML(context);
         }
 
+        private static void ExportSalesWithAppliedDiscountToXML(CarDealerContext context)
+        {
+            var salesWithAppliedDiscount = context.Sales
+                .Select(sale => new
+                {
+                    car = new
+                    {
+                        sale.Car.Make,
+                        sale.Car.Model,
+                        sale.Car.TravelledDistance
+                    },
+                    customerName = sale.Customer.Name,
+                    Discount = sale.Discount,
+                    price = sale.Car.Parts.Sum(p => p.Price),
+                    priceWithDiscount = sale.Car.Parts.Sum(p => p.Price) - (sale.Car.Parts.Sum(p => p.Price) * sale.Discount)
+                });
+
+            var xmlDocument = new XDocument();
+            var xmlSales = new XElement("sales");
+
+            foreach (var sale in salesWithAppliedDiscount)
+            {
+                var saleNode = new XElement("sale");
+
+                var carNode = new XElement("car");
+                carNode.Add(new XAttribute("make", sale.car.Make));
+                carNode.Add(new XAttribute("model", sale.car.Model));
+                carNode.Add(new XAttribute("travelled-distance", sale.car.TravelledDistance.ToString()));
+
+                saleNode.Add(carNode);
+
+                saleNode.Add(new XElement("customer-name", sale.customerName));
+                saleNode.Add(new XElement("discount", sale.Discount.ToString()));
+                saleNode.Add(new XElement("price", sale.price.ToString()));
+                saleNode.Add(new XElement("price-with-discount", sale.priceWithDiscount.ToString()));
+
+                xmlSales.Add(saleNode);
+            }
+
+            xmlDocument.Add(xmlSales);
+            xmlDocument.Save($"../../sales-discounts.xml");
+
+            Console.WriteLine(xmlDocument);
+        }
+
+        private static void ExportCustomersTotalSalesToXML(CarDealerContext context)
+        {
+            var customersTotalSales = context.Customers
+                .Where(s => s.Sales.Any() == true)
+                .Select(c => new
+                {
+                    fullName = c.Name,
+                    boughtCars = c.Sales.Count,
+                    spentMoney = c.Sales.Sum(p => p.Car.Parts.Sum(s => s.Price))
+                })
+                .OrderByDescending(c => c.spentMoney)
+                .ThenByDescending(sm => sm.spentMoney)
+                .ToList();
+
+            var xmlDocument = new XDocument();
+            var xmlCustomers = new XElement("customers");
+
+            foreach (var customer in customersTotalSales)
+            {
+                var customerNode = new XElement("customer");
+                customerNode.Add(new XAttribute("full-name", customer.fullName));
+                customerNode.Add(new XAttribute("bought-cars", customer.boughtCars.ToString()));
+                customerNode.Add(new XAttribute("parts-count", customer.spentMoney.ToString()));
+                xmlCustomers.Add(customerNode);
+            }
+
+            xmlDocument.Add(xmlCustomers);
+            xmlDocument.Save($"../../customers-total-sales.xml");
+
+            Console.WriteLine(xmlDocument);
+        }
+
+        private static void ExportCarsAndPartsToXML(CarDealerContext context)
+        {
+            var carsAndParts = context.Cars
+                .Select(car => new
+                {
+                    Make = car.Make,
+                    Model = car.Model,
+                    TravelledDistance = car.TravelledDistance,
+                    parts = car.Parts.Select(part => new
+                    {
+                        Name = part.Name,
+                        Price = part.Price
+                    })
+                });
+
+            var xmlDocument = new XDocument();
+            var xmlCars = new XElement("cars");
+
+            foreach (var car in carsAndParts)
+            {
+                var carNode = new XElement("car");
+                carNode.Add(new XAttribute("make", car.Make));
+                carNode.Add(new XAttribute("model", car.Model));
+                carNode.Add(new XAttribute("travelled-distance", car.TravelledDistance.ToString()));
+
+                var xmlParts = new XElement("parts");
+
+                foreach (var part in car.parts)
+                {
+                    var partNode = new XElement("part");
+                    partNode.Add(new XAttribute("name", part.Name));
+                    partNode.Add(new XAttribute("price", part.Price.ToString()));
+                    xmlParts.Add(partNode);
+                }
+
+                carNode.Add(xmlParts);
+                xmlCars.Add(carNode);
+            }
+
+            xmlDocument.Add(xmlCars);
+            xmlDocument.Save($"../../cars-and-parts.xml");
+
+            Console.WriteLine(xmlDocument);
+        }
+
+        private static void ExportLocalSuppliersToXML(CarDealerContext context)
+        {
+            var localSuppliers = context.Suppliers
+                .Where(i => i.IsImporter == false)
+                .Select(supplier => new
+                {
+                    Id = supplier.Id,
+                    Name = supplier.Name,
+                    partsCount = supplier.Parts.Count()
+                });
+
+            var xmlDocument = new XDocument();
+            var xmlSuppliers = new XElement("suppliers");
+
+            foreach (var supplier in localSuppliers)
+            {
+                var supplierNode = new XElement("supplier");
+                supplierNode.Add(new XAttribute("id", supplier.Id));
+                supplierNode.Add(new XAttribute("name", supplier.Name));
+                supplierNode.Add(new XAttribute("parts-count", supplier.partsCount.ToString()));
+                xmlSuppliers.Add(supplierNode);
+            }
+
+            xmlDocument.Add(xmlSuppliers);
+            xmlDocument.Save($"../../local-suppliers.xml");
+
+            Console.WriteLine(xmlDocument);
+        }
+
+        private static void ExportCarsFromMakeToXML(string carMake, CarDealerContext context)
+        {
+            var carsFromMake = context.Cars
+                .OrderBy(n => n.Model)
+                .ThenByDescending(td => td.TravelledDistance)
+                .Where(m => m.Make == carMake)
+                .Select(car => new
+                {
+                    Id = car.Id,
+                    Make = car.Make,
+                    Model = car.Model,
+                    TravelledDistance = car.TravelledDistance
+                });
+
+            var xmlDocument = new XDocument();
+            var xmlCars = new XElement("cars");
+
+            foreach (var car in carsFromMake)
+            {
+                var carNode = new XElement("car");
+                carNode.Add(new XAttribute("make", car.Make));
+                carNode.Add(new XAttribute("model", car.Model));
+                carNode.Add(new XAttribute("travelled-distance", car.TravelledDistance.ToString()));
+                xmlCars.Add(carNode);
+            }
+
+            xmlDocument.Add(xmlCars);
+            xmlDocument.Save($"../../{carMake}-cars.xml");
+
+            Console.WriteLine(xmlDocument);
+        }
+
         private static void ExportOrderedCustomersToXML(CarDealerContext context)
         {
-            throw new NotImplementedException();
+            var orderedCustomers = context.Customers
+                .OrderBy(bd => bd.BirthDate)
+                .ThenBy(yd => yd.IsYoungDriver == false)
+                .Select(user => new
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    BirthDate = user.BirthDate,
+                    IsYoungDriver = user.IsYoungDriver,
+                    Sales = user.Sales.Select(sale => new
+                    {
+                        sale.Id,
+                        sale.Car.Make,
+                        sale.Customer.Name,
+                        sale.Discount
+                    })
+                });
+
+            var xmlDocument = new XDocument();
+            var xmlCustomers = new XElement("customers");
+
+            foreach (var customer in orderedCustomers)
+            {
+                var customerNode = new XElement("customer");
+                customerNode.Add(new XElement("id", customer.Id));
+                customerNode.Add(new XElement("name", customer.Name));
+                customerNode.Add(new XElement("birth-date", customer.BirthDate.ToString("o"))); // Fix ending
+                customerNode.Add(new XElement("is-young-driver", customer.IsYoungDriver.ToString()));
+                xmlCustomers.Add(customerNode);
+            }
+
+            xmlDocument.Add(xmlCustomers);
+            xmlDocument.Save("../../ordered-customers.xml");
+
+            Console.WriteLine(xmlDocument);
         }
 
         private static void ImportCustomersFromXML(CarDealerContext context)

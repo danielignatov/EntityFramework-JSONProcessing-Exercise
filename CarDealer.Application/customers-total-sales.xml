@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<customers>
+  <customer full-name="Lino Subia" bought-cars="4" parts-count="22345.77" />
+  <customer full-name="Yvonne Mccalla" bought-cars="3" parts-count="18659.85" />
+  <customer full-name="Rema Revelle" bought-cars="3" parts-count="13958.69" />
+  <customer full-name="Hipolito Lamoreaux" bought-cars="2" parts-count="13874.98" />
+  <customer full-name="Daniele Zarate" bought-cars="3" parts-count="12122.20" />
+  <customer full-name="Taina Achenbach" bought-cars="2" parts-count="11703.64" />
+  <customer full-name="Garret Capron" bought-cars="2" parts-count="11620.37" />
+  <customer full-name="Zada Attwood" bought-cars="2" parts-count="10578.82" />
+  <customer full-name="Carole Witman" bought-cars="3" parts-count="10489.81" />
+  <customer full-name="Teddy Hobby" bought-cars="2" parts-count="9737.97" />
+  <customer full-name="Teddy Hobby" bought-cars="2" parts-count="9337.67" />
+  <customer full-name="Hai Everton" bought-cars="2" parts-count="7836.49" />
+  <customer full-name="Louann Holzworth" bought-cars="1" parts-count="7206.15" />
+  <customer full-name="Nisha Markwell" bought-cars="1" parts-count="6898.07" />
+  <customer full-name="Johnette Derryberry" bought-cars="2" parts-count="6499.08" />
+  <customer full-name="Cinthia Lasala" bought-cars="2" parts-count="5811.08" />
+  <customer full-name="Brett Brickley" bought-cars="1" parts-count="5776.27" />
+  <customer full-name="Garret Capron" bought-cars="1" parts-count="5584.88" />
+  <customer full-name="Sylvie Mcelravy" bought-cars="1" parts-count="5131.30" />
+  <customer full-name="Yvonne Mccalla" bought-cars="1" parts-count="4850.33" />
+  <customer full-name="Rico Peer" bought-cars="1" parts-count="4416.68" />
+  <customer full-name="Johnette Derryberry" bought-cars="1" parts-count="4243.04" />
+  <customer full-name="Daniele Zarate" bought-cars="1" parts-count="4234.43" />
+  <customer full-name="Taina Achenbach" bought-cars="1" parts-count="4184.29" />
+  <customer full-name="Carri Knapik" bought-cars="1" parts-count="3573.60" />
+  <customer full-name="Donnetta Soliz" bought-cars="1" parts-count="3539.69" />
+  <customer full-name="Hipolito Lamoreaux" bought-cars="1" parts-count="3396.82" />
+  <customer full-name="Hai Everton" bought-cars="1" parts-count="3149.03" />
+  <customer full-name="Zada Attwood" bought-cars="1" parts-count="2915.10" />
+  <customer full-name="Natalie Poli" bought-cars="1" parts-count="2803.49" />
+  <customer full-name="Jimmy Grossi" bought-cars="1" parts-count="2704.47" />
+  <customer full-name="Francis Mckim" bought-cars="1" parts-count="2358.15" />
+  <customer full-name="Carri Knapik" bought-cars="1" parts-count="2261.03" />
+  <customer full-name="Rico Peer" bought-cars="1" parts-count="2124.95" />
+  <customer full-name="Faustina Burgher" bought-cars="1" parts-count="2022.81" />
+  <customer full-name="Carole Witman" bought-cars="1" parts-count="2016.60" />
+  <customer full-name="Louann Holzworth" bought-cars="1" parts-count="1836.18" />
+</customers>

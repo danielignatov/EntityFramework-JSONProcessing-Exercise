@@ -16,11 +16,21 @@
         private const string ProductsPath = "../../../Resources/products.json";
         private const string CategoriesPath = "../../../Resources/categories.json";
 
+        private const string UsersPathXML = "../../../Resources/users.xml";
+        private const string ProductsPathXML = "../../../Resources/products.xml";
+        private const string CategoriesPathXML = "../../../Resources/categories.xml";
+
         protected override void Seed(ProductShopContext context)
         {
-            ImportUsers();
-            ImportCategories();
-            ImportProductsWithRandomUsersAndCategories();
+            /// JSON Imports
+            //ImportUsers();
+            //ImportCategories();
+            //ImportProductsWithRandomUsersAndCategories();
+
+            /// XML Imports
+            ImportUsersFromXML();
+            ImportCategoriesFromXML();
+            ImportProductsFromXMLWithRandomUsersAndCategories();
 
             base.Seed(context);
         }
@@ -128,6 +138,21 @@
             }
 
             context.SaveChanges();
+        }
+        
+        private void ImportUsersFromXML()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ImportCategoriesFromXML()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ImportProductsFromXMLWithRandomUsersAndCategories()
+        {
+            throw new NotImplementedException();
         }
     }
 }
