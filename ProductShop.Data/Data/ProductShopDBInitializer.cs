@@ -9,6 +9,8 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
 
     public class ProductShopDBInitializer : CreateDatabaseIfNotExists<ProductShopContext>
     {
@@ -142,17 +144,111 @@
         
         private void ImportUsersFromXML()
         {
-            throw new NotImplementedException();
+            ProductShopContext context = new ProductShopContext();
+
+            var xml = XDocument.Load(UsersPathXML);
+            var xmlUsers = xml.XPathSelectElements("users/user");
+
+            foreach (var user in xmlUsers)
+            {
+                var xmlFirstName = user.Attribute("first-name");
+                var xmlLastName = user.Attribute("last-name");
+                var xmlAge = user.Attribute("age");
+
+                if ((xmlFirstName == null) ||
+                    (xmlLastName == null) ||
+                    (xmlAge == null))
+                {
+                    continue;
+                }
+
+                User userEntity = new User()
+                {
+                    FirstName = xmlFirstName.Value,
+                    LastName = xmlLastName.Value,
+                    Age = Convert.ToInt32(xmlAge.Value)
+                };
+
+                context.Users.Add(userEntity);
+            }
+
+            context.SaveChanges();
         }
 
         private void ImportCategoriesFromXML()
         {
-            throw new NotImplementedException();
+            ProductShopContext context = new ProductShopContext();
+
+            var xml = XDocument.Load(CategoriesPathXML);
+
+            foreach (var category in xml.Root.Elements("category"))
+            {
+                var xmlCategoryName = category.Element("name");
+
+                if (xmlCategoryName == null)
+                {
+                    continue;
+                }
+
+                Category categoryEntity = new Category()
+                {
+                    Name = xmlCategoryName.Value
+                };
+
+                context.Categories.Add(categoryEntity);
+            }
+
+            context.SaveChanges();
         }
 
         private void ImportProductsFromXMLWithRandomUsersAndCategories()
         {
-            throw new NotImplementedException();
+            ProductShopContext context = new ProductShopContext();
+            Random rng = new Random();
+            int totalNumberOfUsers = context.Users.Count();
+
+            var xml = XDocument.Load(ProductsPathXML);
+
+            foreach (var product in xml.Root.Elements("product"))
+            {
+                var xmlProductName = product.Element("name");
+                var xmlProductPrice = product.Element("price");
+
+                if ((xmlProductPrice == null) ||
+                    (xmlProductName == null))
+                {
+                    continue;
+                }
+
+                int randomSellerUserId = rng.Next(1, totalNumberOfUsers);
+                int randomBuyerUserId = rng.Next(1, totalNumberOfUsers);
+
+                // Ensure Seller UserId and Buyer UserId are different.
+                while (randomSellerUserId == randomBuyerUserId)
+                {
+                    randomBuyerUserId = rng.Next(1, totalNumberOfUsers);
+                }
+
+                var productContext = new Product()
+                {
+                    Name = xmlProductName.Value,
+                    Price = Convert.ToDecimal(xmlProductPrice.Value),
+                    Seller = context.Users.Find(randomSellerUserId),
+                    Buyer = context.Users.Find(randomBuyerUserId)
+                };
+
+                if (50 >= rng.Next(0, 100))
+                {
+                    productContext.Buyer = null;
+                }
+
+                Category randomCategory = context.Categories.Find(rng.Next(0, context.Categories.Count()));
+                productContext.Categories.Add(randomCategory);
+
+                context.Products.Add(productContext);
+            }
+
+            context.SaveChanges();
         }
     }
 }

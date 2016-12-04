@@ -21,7 +21,7 @@
             //ExportProductsInPriceRangeWithNoBuyerToJSON(500m, 1000m, context);
             //ExportUsersSoldProductToJSON(context);
             //ExportCategoriesByProductsCountToJSON(context);
-            ExportUsersAndProductsToJSON(context);
+            //ExportUsersAndProductsToJSON(context);
         }
 
         private static void ExportUsersAndProductsToJSON(ProductShopContext context)
