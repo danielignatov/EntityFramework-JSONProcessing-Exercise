@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<products>
+  <product name="Parsley" price="519.06" seller="Christine Gomez" />
+  <product name="Extra Strength Pain Reliever PM" price="542.72" seller="Betty Ward" />
+  <product name="Propranolol Hydrochloride" price="546.95" seller="Benjamin Henry" />
+  <product name="DAYWEAR PLUS MULTI PROTECTION TINTED MOISTURIZER" price="555.12" seller="Bonnie Fox" />
+  <product name="Topiramate" price="578.77" seller="Diana Harvey" />
+  <product name="AIR" price="581.69" seller="Christine Gomez" />
+  <product name="Agaricus Equisetum Special Order" price="585.93" seller="Patricia Cooper" />
+  <product name="Diastat" price="614.14" seller="Chris Mitchell" />
+  <product name="ziprasidone hydrochloride" price="628.66" seller="Gloria Alexander" />
+  <product name="Childrens Allegra Allergy" price="650.97" seller="Jeremy Woods" />
+  <product name="Amitiza" price="666.58" seller="Rachel Johnson" />
+  <product name="CLARINS Ever Matte SPF 15 - 105 Nude" price="696.06" seller="Christina Patterson" />
+  <product name="GOONG SECRET CALMING BATH" price="742.47" seller="Jacqueline Perez" />
+  <product name="Pollens - Weeds and Garden Plants, Nettle Urtica dioica" price="782.77" seller="Diana Harvey" />
+  <product name="Meloxicam" price="809.18" seller="Nicole Martinez" />
+  <product name="Azithromycin" price="813.87" seller="Diana Harvey" />
+  <product name="LV-FX" price="820.87" seller="Brenda Howell" />
+  <product name="IOPE SUPER VITAL" price="824.68" seller="Benjamin Henry" />
+  <product name="Aquafresh" price="849.93" seller="Nicole Martinez" />
+  <product name="Moore Medical Sinus Pain and Pressure Relief" price="855.39" seller="Gloria Alexander" />
+  <product name="Shopko Lip Treatment" price="861.42" seller="Kathy Gilbert" />
+  <product name="Perrigo Benzoyl Peroxide" price="873.24" seller="Gloria Alexander" />
+  <product name="ESIKA" price="879.37" seller="Brandon Fuller" />
+  <product name="Levothyroxine Sodium" price="885.86" seller="Billy Parker" />
+  <product name="Myristica Argentum Sinus Relief" price="904.52" seller="Christina Patterson" />
+  <product name="Spironolactone" price="933.69" seller="Arthur Reynolds" />
+  <product name="pain relief" price="938.23" seller="Brandon Fuller" />
+  <product name="NEO-POLY-BAC HYDRO" price="967.32" seller="Jeremy Woods" />
+  <product name="Clearskin" price="968.59" seller="Clarence Fowler" />
+  <product name="Smooth texture Orange flavor" price="976.65" seller="Benjamin Henry" />
+</products>
